@@ -14,6 +14,11 @@ class MyTestCase(TestCase):
             password='123456'
         )
 
+        cls.non_author = get_user_model().objects.create_user(
+            username='non_author',
+            password='123456'
+        )
+
         cls.test_group = Group.objects.create(
             id=1,
             title='Тестовая группа',
@@ -33,3 +38,5 @@ class MyTestCase(TestCase):
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.test_user)
+        self.non_author_client = Client()
+        self.non_author_client.force_login(self.non_author)

@@ -15,6 +15,6 @@
         {% endif %}
     {% endfor %}
 
-    {% include "paginator.html" %}
+    {% include 'paginator.html' with item=page paginator=paginator %}
 
 {% endblock %}

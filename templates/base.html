@@ -9,18 +9,29 @@
     <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
     <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+    {% if request.path == '/about/tech/' %}
+        <link rel="stylesheet" type="text/css" href="{% static "about/css/tech_style.css" %}">
+        <script src="{% static "about/js/jquery-1.10.1.min.js" %}"></script>
+        <link rel="stylesheet" href="{% static "about/css/normalize.min.css" %}">
+        <script src="{% static "about/js/easeljs-0.7.1.min.js" %}"></script>
+        <script src="{% static "about/js/TweenMax.min.js" %}"></script>
+    {% endif %}
+    {% if request.path == '/about/author/' %}
+        <link rel="stylesheet" type="text/css" href="{% static "about/css/author_style.css" %}">
+    {% endif %}
 </head>
 
 <body>
     {% include 'nav.html' %}
-    <main>
-        <div class="container">
-            <h1>{% block header %}The Last Social Media You'll Ever Need{% endblock %}</h1>
-            {% block content %}
-            <!-- Содержимое страницы -->
-            {% endblock %}
-        </div>
-    </main>
+        <main>
+            <div class="container">
+                <h1>{% block header %}The Last Social Media You'll Ever Need{% endblock %}</h1>
+                {% block content %}
+                <!-- Содержимое страницы -->
+                {% endblock %}
+            </div>
+        </main>
     {% include 'footer.html' %}
 </body>
 

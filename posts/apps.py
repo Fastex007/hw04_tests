@@ -1,4 +1,4 @@
-from django.apps import AppConfig
+clsfrom django.apps import AppConfig
 
 
 class PostsConfig(AppConfig):

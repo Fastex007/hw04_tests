@@ -58,7 +58,7 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-                    {% include "paginator.html" %}
+                    {% include 'paginator.html' with item=page paginator=paginator %}
          </div>
         </div>
     </main>

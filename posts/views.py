@@ -12,7 +12,8 @@ def index(request):
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'index.html', {'page': page})
+    return render(request, 'index.html', {'page': page,
+                                          'paginator': paginator})
 
 
 def group_posts(request, slug):
@@ -21,7 +22,9 @@ def group_posts(request, slug):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'group.html', {'group': group, 'page': page})
+    return render(request, 'group.html', {'group': group,
+                                          'page': page,
+                                          'paginator': paginator})
 
 
 @login_required
@@ -50,7 +53,8 @@ def profile(request, username):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'profile.html', {'user_posts': user_posts,
-                                            'page': page})
+                                            'page': page,
+                                            'paginator': paginator})
 
 
 def post_view(request, username, post_id):
@@ -80,7 +84,9 @@ def post_edit(request, username, post_id):
             return redirect(f'/{username}/{post_id}')
 
         return render(request, 'new_post.html', {'form': form,
-                                                 'edit_mode': True})
+                                                 'edit_mode': True,
+                                                 'post': post})
 
     return render(request, 'new_post.html', {'form': form,
-                                             'edit_mode': True})
+                                             'edit_mode': True,
+                                             'post': post})
