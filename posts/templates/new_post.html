@@ -28,9 +28,9 @@
                 {% endif %}
 
                 {% if edit_mode %}
-                    {% url 'posts:post_edit' post.author.username post.id  as form_action_url %}
+                    {% url 'post_edit' post.author.username post.id  as form_action_url %}
                 {% else %}
-                    {% url 'posts:new_post' as form_action_url %}
+                    {% url 'new_post' as form_action_url %}
                 {% endif %}
 
                 <form action="{{ form_action_url }}" method="post">

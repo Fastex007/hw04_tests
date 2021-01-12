@@ -11,11 +11,11 @@ class PostsPagesTests(MyTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.templates_pages_names = {
-            'index.html': reverse('posts:index'),
+            'index.html': reverse('index'),
             'group.html': (
-                reverse('posts:group', kwargs={'slug': 'test_group'})
+                reverse('group', kwargs={'slug': 'test_group'})
             ),
-            'new_post.html': reverse('posts:new_post'),
+            'new_post.html': reverse('new_post'),
         }
 
     def test_pages_uses_correct_template(self):
@@ -41,14 +41,14 @@ class PostsPagesTests(MyTestCase):
 
     def test_index_page_show_correct_context(self):
         """Шаблон index сформирован с правильным контекстом."""
-        response = self.authorized_client.get(reverse('posts:index'))
+        response = self.authorized_client.get(reverse('index'))
 
         self.check_index_context(response)
 
     def test_group_pages_show_correct_context(self):
         """Шаблон group сформирован с правильным контекстом."""
         response = self.authorized_client.get(
-            reverse('posts:group', kwargs={'slug': 'test_group'})
+            reverse('group', kwargs={'slug': 'test_group'})
         )
         self.assertEqual(response.context.get('group').title,
                          'Тестовая группа')
@@ -58,7 +58,7 @@ class PostsPagesTests(MyTestCase):
 
     def test_new_post_page_show_correct_context(self):
         """Шаблон new_post сформирован с правильным контекстом."""
-        response = self.authorized_client.get(reverse('posts:new_post'))
+        response = self.authorized_client.get(reverse('new_post'))
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField,
@@ -86,7 +86,7 @@ class PaginatorViewsTest(MyTestCase):
 
         Должно быть 10 записей
         """
-        response = self.client.get(reverse('posts:index'))
+        response = self.client.get(reverse('index'))
         self.assertEqual(len(response.context.get('page').object_list),
                          POSTS_PER_PAGE)
 
@@ -95,7 +95,7 @@ class PaginatorViewsTest(MyTestCase):
 
         На первой странице пагинации
         """
-        response = self.client.get(reverse('posts:index'))
+        response = self.client.get(reverse('index'))
         for i in range(POSTS_PER_PAGE-1, 0):
             self.assertEqual(response.context.get('page').object_list[i].text,
                              f'Тестовый текст {i}')
@@ -105,7 +105,7 @@ class PaginatorViewsTest(MyTestCase):
 
         Должно быть 3 записи
         """
-        response = self.client.get(reverse('posts:index') + '?page=2')
+        response = self.client.get(reverse('index') + '?page=2')
         self.assertEqual(len(response.context.get('page').object_list), 3)
 
 
@@ -113,7 +113,7 @@ class ProfileTests(MyTestCase):
     def test_edit_correct_form_fields(self):
         """Шаблон /edit/ сформирован с правильными полями."""
         response = self.authorized_client.get(
-            reverse('posts:post_edit',
+            reverse('post_edit',
                     kwargs={'username': ProfileTests.test_user.username,
                             'post_id': ProfileTests.test_post.id})
         )
@@ -131,7 +131,7 @@ class ProfileTests(MyTestCase):
     def test_edit_correct_context(self):
         """Шаблон /edit/ сформирован с правильными контекстом."""
         response = self.authorized_client.get(
-            reverse('posts:post_edit',
+            reverse('post_edit',
                     kwargs={'username': ProfileTests.test_user.username,
                             'post_id': ProfileTests.test_post.id})
         )
@@ -145,7 +145,7 @@ class ProfileTests(MyTestCase):
     def test_profile_correct_context(self):
         """Шаблон /<username>/ сформирован с правильными контекстом."""
         response = self.authorized_client.get(
-            reverse('posts:profile',
+            reverse('profile',
                     kwargs={'username': ProfileTests.test_user.username})
         )
 
@@ -163,7 +163,7 @@ class ProfileTests(MyTestCase):
         Сформирован с правильным контекстом
         """
         response = self.authorized_client.get(
-            reverse('posts:post',
+            reverse('post',
                     kwargs={'username': ProfileTests.test_user.username,
                             'post_id': ProfileTests.test_post.id})
         )

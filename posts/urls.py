@@ -2,11 +2,6 @@ from django.urls import path
 
 from . import views
 
-# без нее не работает path('group/', include('posts.urls', namespace='posts')),
-# в yatube/urls.py
-# дело в namespace, я так полагаю
-app_name = 'posts'
-
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -19,4 +14,6 @@ urlpatterns = [
         views.post_edit,
         name='post_edit'
     ),
+    path('404/', views.page_not_found, name='404'),
+    path('500/', views.server_error, name='500'),
 ]

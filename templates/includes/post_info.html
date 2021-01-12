@@ -1,6 +1,6 @@
 <div class="card-body">
     <p class="card-text">
-        <a href="{% url 'posts:profile' user_posts.username %}"><strong class="d-block text-gray-dark">@{{ user_posts.username }}</strong></a>
+        <a href="{% url 'profile' user_posts.username %}"><strong class="d-block text-gray-dark">@{{ user_posts.username }}</strong></a>
         {{ post.text|linebreaksbr }}
     </p>
         <div class="d-flex justify-content-between align-items-center">
@@ -11,7 +11,7 @@
                     {% if user.is_authenticated %}
                         <!--Я как бы по ID сравнивал, а не по username-->
                         {% if post.author == user %}
-                            <a class="btn btn-sm text-muted" href="{% url 'posts:post_edit' user_posts.username post.id %}" role="button">Редактировать</a>
+                            <a class="btn btn-sm text-muted" href="{% url 'post_edit' user_posts.username post.id %}" role="button">Редактировать</a>
                         {% endif %}
                     {% endif %}
             </div>

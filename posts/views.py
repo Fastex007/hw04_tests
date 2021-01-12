@@ -41,7 +41,7 @@ def new_post(request):
             post.author = request.user
             post.save()
 
-            return redirect('posts:index')
+            return redirect('index')
 
         return render(request, 'new_post.html', {'form': form})
 
@@ -52,7 +52,7 @@ def new_post(request):
 def profile(request, username):
     user = get_user_model()
     user_posts = get_object_or_404(user, username=username)
-    posts = user_posts.posts.all().order_by('-pub_date')
+    posts = user_posts.posts.all()
     paginator = Paginator(posts, POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -76,7 +76,7 @@ def post_edit(request, username, post_id):
     if request.user.id != post.author_id:
         return redirect(
             reverse(
-                'posts:post',
+                'post',
                 kwargs={'username': username, 'post_id': post_id}
             )
         )
@@ -88,10 +88,23 @@ def post_edit(request, username, post_id):
             form.save()
             return redirect(
                 reverse(
-                    'posts:post',
+                    'post',
                     kwargs={'username': username, 'post_id': post_id}
                 )
             )
     return render(request, 'new_post.html', {'form': form,
                                              'edit_mode': True,
                                              'post': post})
+
+
+def page_not_found(request, exception):
+    return render(
+        request,
+        'misc/404.html',
+        {'path': request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    return render(request, 'misc/500.html', status=500)
