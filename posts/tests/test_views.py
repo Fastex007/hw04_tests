@@ -3,6 +3,7 @@ from django import forms
 
 from posts.lib.MyTestCase import MyTestCase
 from posts.models import Post
+from posts.views import POSTS_PER_PAGE
 
 
 class PostsPagesTests(MyTestCase):
@@ -26,8 +27,10 @@ class PostsPagesTests(MyTestCase):
                 self.assertTemplateUsed(response, template)
 
     def check_index_context(self, response):
-        """Проверяем контекст index. Вынесено в отдельную функцию
-        чтобы не дублировать код"""
+        """Проверяем контекст index.
+
+        Вынесено в отдельную функцию чтобы не дублировать код
+        """
         post_text_0 = response.context.get('page')[0].text
         post_author_0 = response.context.get('page')[0].author
         post_group_0 = response.context.get('page')[0].group
@@ -79,16 +82,29 @@ class PaginatorViewsTest(MyTestCase):
             )
 
     def test_first_page_contains_ten_records(self):
+        """Проверяем работу пагинации на главной страницу.
+
+        Должно быть 10 записей
+        """
         response = self.client.get(reverse('posts:index'))
-        self.assertEqual(len(response.context.get('page').object_list), 10)
+        self.assertEqual(len(response.context.get('page').object_list),
+                         POSTS_PER_PAGE)
 
     def test_first_page_posts_contains(self):
+        """Проверяем правильные ли записи выводятся на главную страницу.
+
+        На первой странице пагинации
+        """
         response = self.client.get(reverse('posts:index'))
-        for i in range(9, 0):
+        for i in range(POSTS_PER_PAGE-1, 0):
             self.assertEqual(response.context.get('page').object_list[i].text,
                              f'Тестовый текст {i}')
 
     def test_second_page_contains_three_records(self):
+        """Проверяем количество записей на второй странице пагинации.
+
+        Должно быть 3 записи
+        """
         response = self.client.get(reverse('posts:index') + '?page=2')
         self.assertEqual(len(response.context.get('page').object_list), 3)
 
@@ -142,8 +158,10 @@ class ProfileTests(MyTestCase):
         self.assertEqual(post_group_0, ProfileTests.test_group)
 
     def test_one_post_correct_context(self):
-        """Шаблон /<username>/<post_id>/
-        сформирован с правильным контекстом."""
+        """Шаблон /<username>/<post_id>/.
+
+        Сформирован с правильным контекстом
+        """
         response = self.authorized_client.get(
             reverse('posts:post',
                     kwargs={'username': ProfileTests.test_user.username,

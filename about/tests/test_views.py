@@ -14,8 +14,9 @@ class StaticURLTests(MyTestCase):
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
-        for template, reverse_name in \
-                StaticURLTests.templates_pages_names.items():
+        for template, reverse_name in (
+                StaticURLTests.templates_pages_names.items()
+        ):
             with self.subTest(reverse_name=reverse_name):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)

@@ -20,12 +20,11 @@ class PostsFormTests(MyTestCase):
             follow=True
         )
 
-        self.assertRedirects(response, '/')
+        self.assertRedirects(response, reverse('posts:index'))
         self.assertEqual(Post.objects.count(), posts_count + 1)
 
     def test_edit_post(self):
-        """После редактирования через форму
-        изменяется соответствующая запись в БД"""
+        """После редактирования изменяется соответствующая запись в БД."""
         response = self.authorized_client.get(
             reverse('posts:post_edit',
                     kwargs={'username': PostsFormTests.test_user.username,

@@ -2,14 +2,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
+from django.urls import reverse
 
 from .models import Post, Group
 from .forms import PostForm
 
 
+POSTS_PER_PAGE = 10
+
+
 def index(request):
-    post_list = Post.objects.select_related('group').order_by('-pub_date')
-    paginator = Paginator(post_list, 10)
+    post_list = Post.objects.select_related('group').all()
+    paginator = Paginator(post_list, POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'index.html', {'page': page,
@@ -18,8 +22,8 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all().order_by('-pub_date')
-    paginator = Paginator(posts, 10)
+    posts = group.posts.all()
+    paginator = Paginator(posts, POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'group.html', {'group': group,
@@ -49,7 +53,7 @@ def profile(request, username):
     user = get_user_model()
     user_posts = get_object_or_404(user, username=username)
     posts = user_posts.posts.all().order_by('-pub_date')
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'profile.html', {'user_posts': user_posts,
@@ -67,26 +71,27 @@ def post_view(request, username, post_id):
 
 @login_required
 def post_edit(request, username, post_id):
-    user = get_user_model()
-    user_post = get_object_or_404(user, username=username)
-    post = user_post.posts.get(id=post_id)
+    post = get_object_or_404(Post, id=post_id)
 
-    form = PostForm(instance=post)
+    if request.user.id != post.author_id:
+        return redirect(
+            reverse(
+                'posts:post',
+                kwargs={'username': username, 'post_id': post_id}
+            )
+        )
 
-    if request.method == 'GET':
-        if request.user.id != user_post.id:
-            return redirect(f'/{username}/{post_id}')
+    form = PostForm(request.POST or None, instance=post)
 
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect(f'/{username}/{post_id}')
-
-        return render(request, 'new_post.html', {'form': form,
-                                                 'edit_mode': True,
-                                                 'post': post})
-
+            return redirect(
+                reverse(
+                    'posts:post',
+                    kwargs={'username': username, 'post_id': post_id}
+                )
+            )
     return render(request, 'new_post.html', {'form': form,
                                              'edit_mode': True,
                                              'post': post})

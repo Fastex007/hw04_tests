@@ -10,20 +10,23 @@
     <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
-    {% if request.path == '/about/tech/' %}
+    {% url 'about:tech' as about_tech_url %}
+    {% if request.path == about_tech_url %}
         <link rel="stylesheet" type="text/css" href="{% static "about/css/tech_style.css" %}">
         <script src="{% static "about/js/jquery-1.10.1.min.js" %}"></script>
         <link rel="stylesheet" href="{% static "about/css/normalize.min.css" %}">
         <script src="{% static "about/js/easeljs-0.7.1.min.js" %}"></script>
         <script src="{% static "about/js/TweenMax.min.js" %}"></script>
     {% endif %}
-    {% if request.path == '/about/author/' %}
+
+    {% url 'about:author' as about_author_url %}
+    {% if request.path == about_author_url %}
         <link rel="stylesheet" type="text/css" href="{% static "about/css/author_style.css" %}">
     {% endif %}
 </head>
 
 <body>
-    {% include 'nav.html' %}
+    {% include 'includes/nav.html' %}
         <main>
             <div class="container">
                 <h1>{% block header %}The Last Social Media You'll Ever Need{% endblock %}</h1>
@@ -32,7 +35,7 @@
                 {% endblock %}
             </div>
         </main>
-    {% include 'footer.html' %}
+    {% include 'includes/footer.html' %}
 </body>
 
 </html>

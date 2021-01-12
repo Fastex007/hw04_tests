@@ -2,7 +2,9 @@ from django.urls import path
 
 from . import views
 
-
+# без нее не работает path('group/', include('posts.urls', namespace='posts')),
+# в yatube/urls.py
+# дело в namespace, я так полагаю
 app_name = 'posts'
 
 
