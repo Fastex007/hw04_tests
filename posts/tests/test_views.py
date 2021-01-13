@@ -51,9 +51,10 @@ class PostsPagesTests(MyTestCase):
         response = self.authorized_client.get(
             reverse('group', kwargs={'slug': 'test_group'})
         )
-        self.assertEqual(response.context.get('group').title,
+        group = response.context.get('group')
+        self.assertEqual(group.title,
                          'Тестовая группа')
-        self.assertEqual(response.context.get('group').slug, 'test_group')
+        self.assertEqual(group.slug, 'test_group')
         # Провряем на месте ли оказался новый пост
         self.check_index_context(response)
 
