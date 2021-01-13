@@ -1,5 +1,5 @@
-from django.urls import reverse
 from django import forms
+from django.urls import reverse
 
 from posts.lib.MyTestCase import MyTestCase
 from posts.models import Post
@@ -20,8 +20,9 @@ class PostsPagesTests(MyTestCase):
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
-        for template, reverse_name in \
-                PostsPagesTests.templates_pages_names.items():
+        for template, reverse_name in (
+                PostsPagesTests.templates_pages_names.items()
+        ):
             with self.subTest(reverse_name=reverse_name):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)

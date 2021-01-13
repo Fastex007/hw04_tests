@@ -1,20 +1,30 @@
-from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+import shutil
+import tempfile
 
-from posts.models import Post, Group
+from django.conf import settings
+from django.test import Client, TestCase
+
+from posts.models import Group, Post, User
 
 
 class MyTestCase(TestCase):
     @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
+
+    @classmethod
     def setUpClass(cls):
         super().setUpClass()
 
-        cls.test_user = get_user_model().objects.create_user(
+        settings.MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
+
+        cls.test_user = User.objects.create_user(
             username='test_user',
             password='123456'
         )
 
-        cls.non_author = get_user_model().objects.create_user(
+        cls.non_author = User.objects.create_user(
             username='non_author',
             password='123456'
         )

@@ -1,7 +1,7 @@
 from django.urls import reverse
 
-from posts.models import Post
 from posts.lib.MyTestCase import MyTestCase
+from posts.models import Post
 
 
 class PostsFormTests(MyTestCase):
@@ -34,7 +34,9 @@ class PostsFormTests(MyTestCase):
         form_data['text'] = 'Обновлённый текст'
 
         self.authorized_client.post(
-            reverse('new_post'),
+            reverse('post_edit',
+                    kwargs={'username': PostsFormTests.test_user.username,
+                            'post_id': PostsFormTests.test_post.id}),
             data=form_data,
             follow=True)
 

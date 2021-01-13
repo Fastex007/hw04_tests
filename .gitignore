@@ -21,6 +21,8 @@ htmlcov/
 static/
 posts/static/
 
+media/
+
 .coverage
 
 db.sqlite3

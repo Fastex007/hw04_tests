@@ -1,3 +1,4 @@
+{% include 'includes/head_image.html' %}
 <div class="card-body">
     <p class="card-text">
         <a href="{% url 'profile' user_posts.username %}"><strong class="d-block text-gray-dark">@{{ user_posts.username }}</strong></a>
@@ -8,11 +9,8 @@
                 {% if user.is_authenticated %}
                     <a class="btn btn-sm text-muted" href="/{{ user_posts.username }}/{{ post.id }}/" role="button">Добавить комментарий</a>
                 {% endif %}
-                    {% if user.is_authenticated %}
-                        <!--Я как бы по ID сравнивал, а не по username-->
-                        {% if post.author == user %}
-                            <a class="btn btn-sm text-muted" href="{% url 'post_edit' user_posts.username post.id %}" role="button">Редактировать</a>
-                        {% endif %}
+                    {% if user.is_authenticated and post.author == user %}
+                        <a class="btn btn-sm text-muted" href="{% url 'post_edit' user_posts.username post.id %}" role="button">Редактировать</a>
                     {% endif %}
             </div>
                 <small class="text-muted">{{ post.pub_date|date:"d M Y" }}</small>
